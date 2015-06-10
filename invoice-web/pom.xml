@@ -17,7 +17,7 @@
 	<url>http://maven.apache.org</url>
 
 	<dependencies>
-		<!-- Java EE dependencies -->
+		<!-- Servlet API -->
 
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -25,9 +25,19 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- JAX-RS API -->
+
+		<dependency>
+			<groupId>javax.ws.rs</groupId>
+			<artifactId>jsr311-api</artifactId>
+		</dependency>
 
 		<!-- CXF dependencies -->
 
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxrs</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-frontend-jaxws</artifactId>

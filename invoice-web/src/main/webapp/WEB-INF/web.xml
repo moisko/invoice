@@ -2,6 +2,24 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
 	      http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
+	<display-name>Invoice Web Application</display-name>
 
-	<display-name>Archetype Created Web Application</display-name>
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+
+	<servlet>
+		<servlet-name>CXF Servlet</servlet-name>
+		<servlet-class>org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet</servlet-class>
+		<init-param>
+			<param-name>jaxrs.serviceClasses</param-name>
+			<param-value>invoice.controller.InvoiceService</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>CXF Servlet</servlet-name>
+		<url-pattern>/*</url-pattern>
+	</servlet-mapping>
 </web-app>
