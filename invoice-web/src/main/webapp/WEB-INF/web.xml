@@ -9,7 +9,7 @@
 	</welcome-file-list>
 
 	<servlet>
-		<servlet-name>CXF Servlet</servlet-name>
+		<servlet-name>Invoice Service CXF Servlet</servlet-name>
 		<servlet-class>org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet</servlet-class>
 		<init-param>
 			<param-name>jaxrs.serviceClasses</param-name>
@@ -19,7 +19,7 @@
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>CXF Servlet</servlet-name>
-		<url-pattern>/*</url-pattern>
+		<servlet-name>Invoice Service CXF Servlet</servlet-name>
+		<url-pattern>/invoiceservice/*</url-pattern>
 	</servlet-mapping>
 </web-app>
