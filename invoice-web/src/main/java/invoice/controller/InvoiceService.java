@@ -7,6 +7,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -20,7 +21,7 @@ public class InvoiceService extends InvoiceBaseService {
 	ServletContext context;
 
 	@GET
-	@Path("/{id}")
+	@Path("/get/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getInvoice(@PathParam("id") Long id) {
@@ -29,6 +30,18 @@ public class InvoiceService extends InvoiceBaseService {
 		InvoiceDAO invoiceDAO = new InvoiceDAO(emf);
 		Invoice invoice = invoiceDAO.getInvoice(id);
 		return buildResponse(invoice);
+	}
+
+	@POST
+	@Path("/create")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response createInvoice(Invoice invoice) {
+		EntityManagerFactory emf = (EntityManagerFactory) context
+				.getAttribute("emf");
+		InvoiceDAO invoiceDAO = new InvoiceDAO(emf);
+		invoiceDAO.createInvoice(invoice);
+		return buildResponse(invoice.getId());
 	}
 
 }

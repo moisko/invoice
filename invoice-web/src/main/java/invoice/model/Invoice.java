@@ -10,12 +10,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
+@NamedQuery(name = "findInvoiceById", query = "SELECT i FROM Invoice i WHERE i.id = :id")
 @Table(name = "INVOICE")
 public class Invoice implements Serializable {
 
@@ -43,8 +45,8 @@ public class Invoice implements Serializable {
 		this.id = id;
 	}
 
-	@OneToOne(optional = false, cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "INVOICE_DETAILS_ID", nullable = false)
+	@OneToOne(optional = true, cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "INVOICE_DETAILS_ID", nullable = true)
 	public InvoiceDetails getDetails() {
 		return details;
 	}

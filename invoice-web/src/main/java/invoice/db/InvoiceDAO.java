@@ -5,6 +5,7 @@ import invoice.model.Invoice;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 
 public class InvoiceDAO {
 
@@ -23,15 +24,32 @@ public class InvoiceDAO {
 		}
 	}
 
-	private Invoice getInvoiceFromDb(EntityManager em, Long id) {
+	public void createInvoice(Invoice invoice) {
+		EntityManager em = emf.createEntityManager();
+		try {
+			createInvocieInDb(em, invoice);
+		} finally {
+			em.close();
+		}
+	}
+
+	private void createInvocieInDb(EntityManager em, Invoice invoice) {
 		EntityTransaction et = em.getTransaction();
 		try {
-			// TODO provide implementation
-			return null;
+			et.begin();
+			em.persist(invoice);
+			et.commit();
 		} finally {
 			if (et.isActive()) {
 				et.rollback();
 			}
 		}
+	}
+
+	private Invoice getInvoiceFromDb(EntityManager em, Long id) {
+		Query q = em.createNamedQuery("findInvoiceById");
+		q.setParameter("id", id);
+		Invoice invoice = (Invoice) q.getSingleResult();
+		return invoice;
 	}
 }

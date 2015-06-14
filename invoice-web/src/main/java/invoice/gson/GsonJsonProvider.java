@@ -10,6 +10,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.util.Date;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -23,6 +24,13 @@ import javax.ws.rs.ext.Provider;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
 @Provider
 @Produces({ MediaType.APPLICATION_JSON })
@@ -39,7 +47,7 @@ public class GsonJsonProvider<T> implements MessageBodyReader<T>,
 			MultivaluedMap<String, Object> httpHeaders,
 			OutputStream entityStream) throws IOException,
 			WebApplicationException {
-		Gson gson = createGson();
+		Gson gson = createGsonInstance();
 		httpHeaders.get(HttpHeaders.CONTENT_TYPE).add(CHARSET_UTF_8);
 		entityStream.write(gson.toJson(t).getBytes(UTF_8));
 	}
@@ -66,17 +74,16 @@ public class GsonJsonProvider<T> implements MessageBodyReader<T>,
 	public T readFrom(Class<T> type, Type genericType, Annotation[] antns,
 			MediaType mt, MultivaluedMap<String, String> mm, InputStream in)
 			throws IOException, WebApplicationException {
-		Gson gson = createGson();
+		Gson gson = createGsonInstance();
 		return gson.fromJson(convertStreamToString(in), type);
 	}
 
-	private String convertStreamToString(InputStream inputStream)
-			throws IOException {
-		if (inputStream != null) {
+	private String convertStreamToString(InputStream is) throws IOException {
+		if (is != null) {
 			Writer writer = new StringWriter();
 			char[] buffer = new char[1024];
-			try (Reader reader = new BufferedReader(new InputStreamReader(
-					inputStream, UTF_8))) {
+			try (Reader reader = new BufferedReader(new InputStreamReader(is,
+					UTF_8))) {
 				int n;
 				while ((n = reader.read(buffer)) != -1) {
 					writer.write(buffer, 0, n);
@@ -88,10 +95,29 @@ public class GsonJsonProvider<T> implements MessageBodyReader<T>,
 		}
 	}
 
-	private Gson createGson() {
+	private Gson createGsonInstance() {
 		GsonBuilder gsonBuilder = new GsonBuilder();
-		// TODO register type adapters here
+		gsonBuilder.registerTypeAdapter(Date.class, new DatetimeDeserializer());
+		gsonBuilder.registerTypeAdapter(Date.class, new DatetimeSerializer());
+		// gsonBuilder.excludeFieldsWithoutExposeAnnotation();
 		return gsonBuilder.create();
+	}
+
+	private static class DatetimeDeserializer implements JsonDeserializer<Date> {
+		@Override
+		public Date deserialize(JsonElement json, Type typeOfT,
+				JsonDeserializationContext context) throws JsonParseException {
+			Date datetime = new Date(json.getAsLong());
+			return datetime;
+		}
+	}
+
+	private static class DatetimeSerializer implements JsonSerializer<Date> {
+		@Override
+		public JsonElement serialize(Date date, Type type,
+				JsonSerializationContext context) {
+			return date == null ? null : new JsonPrimitive(date.getTime());
+		}
 	}
 
 }
