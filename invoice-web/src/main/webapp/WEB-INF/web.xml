@@ -17,13 +17,13 @@
 		</init-param>
 		<init-param>
 			<param-name>jaxrs.providers</param-name>
-			<param-value>invoice.gosn.GsonJsonProvider</param-value>
+			<param-value>invoice.gson.GsonJsonProvider</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>Invoice Service CXF Servlet</servlet-name>
-		<url-pattern>/invoiceservice/*</url-pattern>
+		<url-pattern>/invoice/*</url-pattern>
 	</servlet-mapping>
 </web-app>

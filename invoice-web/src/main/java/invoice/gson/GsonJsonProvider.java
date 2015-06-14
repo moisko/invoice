@@ -14,6 +14,7 @@ import java.lang.reflect.Type;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyReader;
@@ -29,15 +30,18 @@ import com.google.gson.GsonBuilder;
 public class GsonJsonProvider<T> implements MessageBodyReader<T>,
 		MessageBodyWriter<T> {
 
+	private static final String UTF_8 = "UTF-8";
+	private static final String CHARSET_UTF_8 = "charset=UTF-8";
+
 	@Override
 	public void writeTo(T t, Class<?> type, Type genericType,
 			Annotation[] annotations, MediaType mediaType,
 			MultivaluedMap<String, Object> httpHeaders,
 			OutputStream entityStream) throws IOException,
 			WebApplicationException {
-		Gson gson = getGson();
-		httpHeaders.get("Content-Type").add("charset=UTF-8");
-		entityStream.write(gson.toJson(t).getBytes("UTF-8"));
+		Gson gson = createGson();
+		httpHeaders.get(HttpHeaders.CONTENT_TYPE).add(CHARSET_UTF_8);
+		entityStream.write(gson.toJson(t).getBytes(UTF_8));
 	}
 
 	@Override
@@ -62,7 +66,7 @@ public class GsonJsonProvider<T> implements MessageBodyReader<T>,
 	public T readFrom(Class<T> type, Type genericType, Annotation[] antns,
 			MediaType mt, MultivaluedMap<String, String> mm, InputStream in)
 			throws IOException, WebApplicationException {
-		Gson gson = getGson();
+		Gson gson = createGson();
 		return gson.fromJson(convertStreamToString(in), type);
 	}
 
@@ -72,7 +76,7 @@ public class GsonJsonProvider<T> implements MessageBodyReader<T>,
 			Writer writer = new StringWriter();
 			char[] buffer = new char[1024];
 			try (Reader reader = new BufferedReader(new InputStreamReader(
-					inputStream, "UTF-8"))) {
+					inputStream, UTF_8))) {
 				int n;
 				while ((n = reader.read(buffer)) != -1) {
 					writer.write(buffer, 0, n);
@@ -84,7 +88,7 @@ public class GsonJsonProvider<T> implements MessageBodyReader<T>,
 		}
 	}
 
-	private Gson getGson() {
+	private Gson createGson() {
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		// TODO register type adapters here
 		return gsonBuilder.create();
