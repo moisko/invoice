@@ -6,6 +6,7 @@
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<jta-data-source>java:/comp/env/jdbc/invoiceDB</jta-data-source>
 		<class>invoice.model.Invoice</class>
+		<class>invoice.model.InvoiceDetails</class>
 		<properties>
 			<property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
 		</properties>

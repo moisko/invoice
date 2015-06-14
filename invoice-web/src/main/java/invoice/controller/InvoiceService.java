@@ -29,10 +29,6 @@ public class InvoiceService {
 				.getAttribute("emf");
 		InvoiceDAO invoiceDAO = new InvoiceDAO(emf);
 		Invoice invoice = invoiceDAO.getInvoice(id);
-		return sendInvoice(invoice);
-	}
-
-	private Response sendInvoice(Invoice invoice) {
 		Response response = null;
 		if (invoice != null) {
 			response = Response.status(HttpServletResponse.SC_OK)
@@ -43,4 +39,5 @@ public class InvoiceService {
 		}
 		return response;
 	}
+
 }

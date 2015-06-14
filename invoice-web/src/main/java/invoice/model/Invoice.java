@@ -3,11 +3,14 @@ package invoice.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -19,6 +22,7 @@ public class Invoice implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
+	private InvoiceDetails details;
 	private String number;
 	private Date date;
 	private String recipient;
@@ -30,13 +34,23 @@ public class Invoice implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ID", unique = true, nullable = false)
+	@Column(name = "INVOICE_ID", unique = true, nullable = false)
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	@OneToOne(optional = false, cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "INVOICE_DETAILS_ID", nullable = false)
+	public InvoiceDetails getDetails() {
+		return details;
+	}
+
+	public void setDetails(InvoiceDetails details) {
+		this.details = details;
 	}
 
 	@Column(name = "INVOICE_NUMBER", nullable = false)
