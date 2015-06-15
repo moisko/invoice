@@ -2,9 +2,9 @@ package invoice.controller;
 
 import invoice.db.InvoiceDAO;
 import invoice.model.Invoice;
-import invoice.validator.InvoiceValidator;
 
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.RollbackException;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
@@ -29,12 +29,12 @@ public class InvoiceService extends InvoiceBaseService {
 		EntityManagerFactory emf = (EntityManagerFactory) context
 				.getAttribute("emf");
 		InvoiceDAO invoiceDAO = new InvoiceDAO(emf);
-		Invoice invoice = invoiceDAO.getInvoice(id);
-		if (invoice != null) {
+		try {
+			Invoice invoice = invoiceDAO.getInvoice(id);
 			return buildResponse(Response.Status.OK.getStatusCode(), invoice);
-		} else {
+		} catch (NoResultException e) {
 			return buildResponse(Response.Status.NOT_FOUND.getStatusCode(),
-					"Invoice not found");
+					e.getMessage());
 		}
 	}
 
@@ -43,37 +43,32 @@ public class InvoiceService extends InvoiceBaseService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createInvoice(Invoice invoice) {
-		if (InvoiceValidator.validate(invoice)) {
-			EntityManagerFactory emf = (EntityManagerFactory) context
-					.getAttribute("emf");
-			InvoiceDAO invoiceDAO = new InvoiceDAO(emf);
-			try {
-				invoiceDAO.createInvoice(invoice);
-			} catch (Exception e) {
-				if (e instanceof RollbackException) {
-					return buildResponse(
-							Response.Status.BAD_REQUEST.getStatusCode(),
-							"Invoice request is not valid");
-				} else {
-					return buildResponse(
-							Response.Status.INTERNAL_SERVER_ERROR
-									.getStatusCode(),
-							e.getMessage());
-				}
-			}
-			return buildResponse(Response.Status.OK.getStatusCode(), invoice);
-		} else {
+		EntityManagerFactory emf = (EntityManagerFactory) context
+				.getAttribute("emf");
+		InvoiceDAO invoiceDAO = new InvoiceDAO(emf);
+		try {
+			invoiceDAO.createInvoice(invoice);
+		} catch (RollbackException e) {
 			return buildResponse(Response.Status.BAD_REQUEST.getStatusCode(),
-					"Invoice request is not valid");
+					e.getMessage());
 		}
+		return buildResponse(Response.Status.OK.getStatusCode(), invoice);
 	}
 
 	@DELETE
 	@Path("/delete/{id}")
-	public void deleteInvoice(@PathParam("id") Long id) {
+	@Produces(MediaType.TEXT_PLAIN)
+	public Response deleteInvoice(@PathParam("id") Long id) {
 		EntityManagerFactory emf = (EntityManagerFactory) context
 				.getAttribute("emf");
 		InvoiceDAO invoiceDAO = new InvoiceDAO(emf);
-		invoiceDAO.deleteInvoice(id);
+		try {
+			invoiceDAO.deleteInvoice(id);
+			return buildResponse(Response.Status.OK.getStatusCode(),
+					"Invoice successfully deleted");
+		} catch (IllegalArgumentException e) {
+			return buildResponse(Response.Status.NOT_FOUND.getStatusCode(),
+					e.getMessage());
+		}
 	}
 }
