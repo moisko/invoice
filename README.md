@@ -46,5 +46,3 @@ DELETE -> /invoice-web/invoice/delete/{id}
 Example:
 
 http://www.boratino.com/invoice-web/invoice/delete/1
-
-NOT SUPPORTED!
