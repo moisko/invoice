@@ -30,6 +30,7 @@ public class Invoice implements Serializable {
 	private String recipient;
 	private String city;
 	private String street;
+	private String accountablePerson;
 	private String invoiceNumberId;
 	private String vat;
 	private String provider;
@@ -99,6 +100,15 @@ public class Invoice implements Serializable {
 
 	public void setStreet(String street) {
 		this.street = street;
+	}
+
+	@Column(name = "ACCOUNTABLE_PERSON", nullable = false)
+	public String getAccountablePerson() {
+		return accountablePerson;
+	}
+
+	public void setAccountablePerson(String accountablePerson) {
+		this.accountablePerson = accountablePerson;
 	}
 
 	@Column(name = "INVOICE_NUMBER_ID", nullable = false)

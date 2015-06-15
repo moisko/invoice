@@ -1,13 +1,13 @@
 package invoice.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -17,12 +17,12 @@ public class InvoiceDetails implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
-	// private Invoice invoice;
+	private Invoice invoice;
 	private Long code;
 	private String name;
 	private Double quantity;
 	private Integer size;
-	private BigDecimal currency;
+	private String currency;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,14 +35,14 @@ public class InvoiceDetails implements Serializable {
 		this.id = id;
 	}
 
-//	@OneToOne(optional = false, mappedBy = "details")
-//	public Invoice getInvoice() {
-//		return invoice;
-//	}
-//
-//	public void setInvoice(Invoice invoice) {
-//		this.invoice = invoice;
-//	}
+	@OneToOne(optional = false, mappedBy = "details")
+	public Invoice getInvoice() {
+		return invoice;
+	}
+
+	public void setInvoice(Invoice invoice) {
+		this.invoice = invoice;
+	}
 
 	@Column(name = "CODE", nullable = false)
 	public Long getCode() {
@@ -81,11 +81,11 @@ public class InvoiceDetails implements Serializable {
 	}
 
 	@Column(name = "CURRENCY", nullable = false)
-	public BigDecimal getCurrency() {
+	public String getCurrency() {
 		return currency;
 	}
 
-	public void setCurrency(BigDecimal currency) {
+	public void setCurrency(String currency) {
 		this.currency = currency;
 	}
 
