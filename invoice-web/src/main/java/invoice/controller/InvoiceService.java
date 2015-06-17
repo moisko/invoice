@@ -34,9 +34,8 @@ public class InvoiceService extends InvoiceBaseService {
 			Invoice invoice = invoiceDAO.getInvoice(id);
 			return buildResponse(Response.Status.OK.getStatusCode(), invoice);
 		} catch (NoResultException e) {
-			InvoiceError invoiceError = new InvoiceError(
-					Response.Status.NOT_FOUND.getStatusCode(), e.getMessage());
-			return buildErrorResponse(invoiceError);
+			return buildResponse(new InvoiceResponse(
+					Response.Status.NOT_FOUND.getStatusCode(), e.getMessage()));
 		}
 	}
 
@@ -50,9 +49,8 @@ public class InvoiceService extends InvoiceBaseService {
 		try {
 			invoiceDAO.createInvoice(invoice);
 		} catch (RollbackException e) {
-			InvoiceError invoiceError = new InvoiceError(
-					Response.Status.BAD_REQUEST.getStatusCode(), e.getMessage());
-			return buildErrorResponse(invoiceError);
+			return buildResponse(new InvoiceResponse(
+					Response.Status.BAD_REQUEST.getStatusCode(), e.getMessage()));
 		}
 		return buildResponse(Response.Status.OK.getStatusCode(), invoice);
 	}
@@ -65,12 +63,12 @@ public class InvoiceService extends InvoiceBaseService {
 		InvoiceDAO invoiceDAO = new InvoiceDAO(emf);
 		try {
 			invoiceDAO.deleteInvoice(id);
-			return buildResponse(Response.Status.OK.getStatusCode(),
-					"Invoice successfully deleted");
+			return buildResponse(new InvoiceResponse(
+					Response.Status.OK.getStatusCode(),
+					"Invoice successfully deleted"));
 		} catch (IllegalArgumentException e) {
-			InvoiceError invoiceError = new InvoiceError(
-					Response.Status.NOT_FOUND.getStatusCode(), e.getMessage());
-			return buildErrorResponse(invoiceError);
+			return buildResponse(new InvoiceResponse(
+					Response.Status.NOT_FOUND.getStatusCode(), e.getMessage()));
 		}
 	}
 }

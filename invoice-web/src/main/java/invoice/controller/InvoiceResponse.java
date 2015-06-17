@@ -2,7 +2,7 @@ package invoice.controller;
 
 import java.io.Serializable;
 
-public class InvoiceError implements Serializable {
+public class InvoiceResponse implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -10,11 +10,11 @@ public class InvoiceError implements Serializable {
 
 	private String message;
 
-	public InvoiceError() {
+	public InvoiceResponse() {
 
 	}
 
-	public InvoiceError(int status, String message) {
+	public InvoiceResponse(int status, String message) {
 		this.status = status;
 		this.message = message;
 	}
