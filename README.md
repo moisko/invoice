@@ -39,7 +39,7 @@ Example:
 
 http://www.boratino.com/invoice-web/invoice/update/
 
-NOT SUPPORTED!
+*NOT SUPPORTED!*
 
 DELETE -> /invoice-web/invoice/delete/{id}
 
