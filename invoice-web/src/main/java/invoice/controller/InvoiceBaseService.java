@@ -9,4 +9,10 @@ public class InvoiceBaseService {
 		return response;
 	}
 
+	protected Response buildErrorResponse(InvoiceError invoiceError) {
+		Response response = Response.status(invoiceError.getStatus())
+				.entity(invoiceError).build();
+		return response;
+	}
+
 }

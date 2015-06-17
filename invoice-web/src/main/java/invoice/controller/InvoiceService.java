@@ -18,6 +18,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+@Produces(MediaType.APPLICATION_JSON)
 public class InvoiceService extends InvoiceBaseService {
 
 	@Context
@@ -33,15 +34,15 @@ public class InvoiceService extends InvoiceBaseService {
 			Invoice invoice = invoiceDAO.getInvoice(id);
 			return buildResponse(Response.Status.OK.getStatusCode(), invoice);
 		} catch (NoResultException e) {
-			return buildResponse(Response.Status.NOT_FOUND.getStatusCode(),
-					e.getMessage());
+			InvoiceError invoiceError = new InvoiceError(
+					Response.Status.NOT_FOUND.getStatusCode(), e.getMessage());
+			return buildErrorResponse(invoiceError);
 		}
 	}
 
 	@POST
 	@Path("/create")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	public Response createInvoice(Invoice invoice) {
 		EntityManagerFactory emf = (EntityManagerFactory) context
 				.getAttribute("emf");
@@ -49,15 +50,15 @@ public class InvoiceService extends InvoiceBaseService {
 		try {
 			invoiceDAO.createInvoice(invoice);
 		} catch (RollbackException e) {
-			return buildResponse(Response.Status.BAD_REQUEST.getStatusCode(),
-					e.getMessage());
+			InvoiceError invoiceError = new InvoiceError(
+					Response.Status.BAD_REQUEST.getStatusCode(), e.getMessage());
+			return buildErrorResponse(invoiceError);
 		}
 		return buildResponse(Response.Status.OK.getStatusCode(), invoice);
 	}
 
 	@DELETE
 	@Path("/delete/{id}")
-	@Produces(MediaType.TEXT_PLAIN)
 	public Response deleteInvoice(@PathParam("id") Long id) {
 		EntityManagerFactory emf = (EntityManagerFactory) context
 				.getAttribute("emf");
@@ -67,8 +68,9 @@ public class InvoiceService extends InvoiceBaseService {
 			return buildResponse(Response.Status.OK.getStatusCode(),
 					"Invoice successfully deleted");
 		} catch (IllegalArgumentException e) {
-			return buildResponse(Response.Status.NOT_FOUND.getStatusCode(),
-					e.getMessage());
+			InvoiceError invoiceError = new InvoiceError(
+					Response.Status.NOT_FOUND.getStatusCode(), e.getMessage());
+			return buildErrorResponse(invoiceError);
 		}
 	}
 }
