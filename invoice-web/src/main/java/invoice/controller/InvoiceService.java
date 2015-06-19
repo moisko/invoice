@@ -35,7 +35,8 @@ public class InvoiceService extends InvoiceBaseService {
 			return buildResponse(Response.Status.OK.getStatusCode(), invoice);
 		} catch (NoResultException e) {
 			return buildResponse(new InvoiceResponse(
-					Response.Status.NOT_FOUND.getStatusCode(), e.getMessage()));
+					Response.Status.NOT_FOUND.getStatusCode(),
+					"Invoice with id " + id + " not found"));
 		}
 	}
 
@@ -64,8 +65,8 @@ public class InvoiceService extends InvoiceBaseService {
 		try {
 			invoiceDAO.deleteInvoice(id);
 			return buildResponse(new InvoiceResponse(
-					Response.Status.OK.getStatusCode(),
-					"Invoice successfully deleted"));
+					Response.Status.OK.getStatusCode(), "Invoice with id " + id
+							+ " successfully deleted"));
 		} catch (IllegalArgumentException e) {
 			return buildResponse(new InvoiceResponse(
 					Response.Status.NOT_FOUND.getStatusCode(), e.getMessage()));
