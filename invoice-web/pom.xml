@@ -12,7 +12,7 @@
 
 	<packaging>war</packaging>
 
-	<name>invoice-web Maven Webapp</name>
+	<name>invoice-web</name>
 
 	<url>http://maven.apache.org</url>
 

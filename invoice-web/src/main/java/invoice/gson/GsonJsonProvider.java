@@ -47,7 +47,7 @@ public class GsonJsonProvider<T> implements MessageBodyReader<T>,
 			MultivaluedMap<String, Object> httpHeaders,
 			OutputStream entityStream) throws IOException,
 			WebApplicationException {
-		Gson gson = createGsonInstance();
+		Gson gson = createGson();
 		httpHeaders.get(HttpHeaders.CONTENT_TYPE).add(CHARSET_UTF_8);
 		entityStream.write(gson.toJson(t).getBytes(UTF_8));
 	}
@@ -74,7 +74,7 @@ public class GsonJsonProvider<T> implements MessageBodyReader<T>,
 	public T readFrom(Class<T> type, Type genericType, Annotation[] antns,
 			MediaType mt, MultivaluedMap<String, String> mm, InputStream in)
 			throws IOException, WebApplicationException {
-		Gson gson = createGsonInstance();
+		Gson gson = createGson();
 		return gson.fromJson(convertStreamToString(in), type);
 	}
 
@@ -95,11 +95,10 @@ public class GsonJsonProvider<T> implements MessageBodyReader<T>,
 		}
 	}
 
-	private Gson createGsonInstance() {
+	private Gson createGson() {
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.registerTypeAdapter(Date.class, new DatetimeDeserializer());
 		gsonBuilder.registerTypeAdapter(Date.class, new DatetimeSerializer());
-		// gsonBuilder.excludeFieldsWithoutExposeAnnotation();
 		return gsonBuilder.create();
 	}
 
@@ -107,8 +106,9 @@ public class GsonJsonProvider<T> implements MessageBodyReader<T>,
 		@Override
 		public Date deserialize(JsonElement json, Type typeOfT,
 				JsonDeserializationContext context) throws JsonParseException {
-			Date datetime = new Date(json.getAsLong());
-			return datetime;
+			long datetime = json.getAsLong();
+			Date date = new Date(datetime);
+			return date;
 		}
 	}
 
