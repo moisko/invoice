@@ -20,7 +20,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
-import javax.ws.rs.ext.Provider;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -32,7 +31,6 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-@Provider
 @Produces({ MediaType.APPLICATION_JSON })
 @Consumes({ MediaType.APPLICATION_JSON })
 public class GsonJsonProvider<T> implements MessageBodyReader<T>,
@@ -79,20 +77,16 @@ public class GsonJsonProvider<T> implements MessageBodyReader<T>,
 	}
 
 	private String convertStreamToString(InputStream is) throws IOException {
-		if (is != null) {
-			Writer writer = new StringWriter();
-			char[] buffer = new char[1024];
-			try (Reader reader = new BufferedReader(new InputStreamReader(is,
-					UTF_8))) {
-				int n;
-				while ((n = reader.read(buffer)) != -1) {
-					writer.write(buffer, 0, n);
-				}
+		Writer writer = new StringWriter();
+		char[] buffer = new char[1024];
+		try (Reader reader = new BufferedReader(
+				new InputStreamReader(is, UTF_8))) {
+			int n;
+			while ((n = reader.read(buffer)) != -1) {
+				writer.write(buffer, 0, n);
 			}
-			return writer.toString();
-		} else {
-			return "";
 		}
+		return writer.toString();
 	}
 
 	private Gson createGson() {

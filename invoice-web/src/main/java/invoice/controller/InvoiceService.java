@@ -4,8 +4,6 @@ import invoice.db.InvoiceDAO;
 import invoice.model.Invoice;
 
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.NoResultException;
-import javax.persistence.RollbackException;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -30,14 +28,8 @@ public class InvoiceService extends InvoiceBaseService {
 		EntityManagerFactory emf = (EntityManagerFactory) context
 				.getAttribute("emf");
 		InvoiceDAO invoiceDAO = new InvoiceDAO(emf);
-		try {
-			Invoice invoice = invoiceDAO.getInvoice(id);
-			return buildResponse(Response.Status.OK.getStatusCode(), invoice);
-		} catch (NoResultException e) {
-			return buildResponse(new InvoiceResponse(
-					Response.Status.NOT_FOUND.getStatusCode(),
-					"Invoice with id " + id + " not found"));
-		}
+		Invoice invoice = invoiceDAO.getInvoice(id);
+		return buildResponse(Response.Status.OK.getStatusCode(), invoice);
 	}
 
 	@POST
@@ -47,12 +39,7 @@ public class InvoiceService extends InvoiceBaseService {
 		EntityManagerFactory emf = (EntityManagerFactory) context
 				.getAttribute("emf");
 		InvoiceDAO invoiceDAO = new InvoiceDAO(emf);
-		try {
-			invoiceDAO.createInvoice(invoice);
-		} catch (RollbackException e) {
-			return buildResponse(new InvoiceResponse(
-					Response.Status.BAD_REQUEST.getStatusCode(), e.getMessage()));
-		}
+		invoiceDAO.createInvoice(invoice);
 		return buildResponse(Response.Status.OK.getStatusCode(), invoice);
 	}
 
@@ -62,14 +49,9 @@ public class InvoiceService extends InvoiceBaseService {
 		EntityManagerFactory emf = (EntityManagerFactory) context
 				.getAttribute("emf");
 		InvoiceDAO invoiceDAO = new InvoiceDAO(emf);
-		try {
-			invoiceDAO.deleteInvoice(id);
-			return buildResponse(new InvoiceResponse(
-					Response.Status.OK.getStatusCode(), "Invoice with id " + id
-							+ " successfully deleted"));
-		} catch (IllegalArgumentException e) {
-			return buildResponse(new InvoiceResponse(
-					Response.Status.NOT_FOUND.getStatusCode(), e.getMessage()));
-		}
+		invoiceDAO.deleteInvoice(id);
+		return buildResponse(new InvoiceResponse(
+				Response.Status.OK.getStatusCode(), "Invoice with id " + id
+						+ " successfully deleted"));
 	}
 }
