@@ -24,10 +24,10 @@ public class InvoiceDAO {
 		}
 	}
 
-	public void createInvoice(Invoice invoice) {
+	public void persistInvoice(Invoice invoice) {
 		EntityManager em = emf.createEntityManager();
 		try {
-			createInvocieInDb(em, invoice);
+			persistInvocieInDb(em, invoice);
 		} finally {
 			em.close();
 		}
@@ -56,7 +56,7 @@ public class InvoiceDAO {
 		}
 	}
 
-	private void createInvocieInDb(EntityManager em, Invoice invoice) {
+	private void persistInvocieInDb(EntityManager em, Invoice invoice) {
 		EntityTransaction et = em.getTransaction();
 		try {
 			et.begin();

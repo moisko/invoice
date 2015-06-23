@@ -26,7 +26,7 @@ public class InvoiceDetails implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "INVOICE_DETAILS_ID", unique = true, nullable = false)
+	@Column(name = "INVOICE_DETAILS_ID", nullable = false)
 	public Long getId() {
 		return id;
 	}

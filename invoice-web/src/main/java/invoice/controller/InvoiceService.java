@@ -39,7 +39,7 @@ public class InvoiceService extends InvoiceBaseService {
 		EntityManagerFactory emf = (EntityManagerFactory) context
 				.getAttribute("emf");
 		InvoiceDAO invoiceDAO = new InvoiceDAO(emf);
-		invoiceDAO.createInvoice(invoice);
+		invoiceDAO.persistInvoice(invoice);
 		return buildResponse(Response.Status.OK.getStatusCode(), invoice);
 	}
 

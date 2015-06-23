@@ -37,7 +37,7 @@ public class Invoice implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "INVOICE_ID", unique = true, nullable = false)
+	@Column(name = "INVOICE_ID", nullable = false)
 	public Long getId() {
 		return id;
 	}

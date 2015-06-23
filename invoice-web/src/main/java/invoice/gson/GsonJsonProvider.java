@@ -23,13 +23,6 @@ import javax.ws.rs.ext.MessageBodyWriter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
 
 @Produces({ MediaType.APPLICATION_JSON })
 @Consumes({ MediaType.APPLICATION_JSON })
@@ -94,24 +87,6 @@ public class GsonJsonProvider<T> implements MessageBodyReader<T>,
 		gsonBuilder.registerTypeAdapter(Date.class, new DatetimeDeserializer());
 		gsonBuilder.registerTypeAdapter(Date.class, new DatetimeSerializer());
 		return gsonBuilder.create();
-	}
-
-	private static class DatetimeDeserializer implements JsonDeserializer<Date> {
-		@Override
-		public Date deserialize(JsonElement json, Type typeOfT,
-				JsonDeserializationContext context) throws JsonParseException {
-			long datetime = json.getAsLong();
-			Date date = new Date(datetime);
-			return date;
-		}
-	}
-
-	private static class DatetimeSerializer implements JsonSerializer<Date> {
-		@Override
-		public JsonElement serialize(Date date, Type type,
-				JsonSerializationContext context) {
-			return date == null ? null : new JsonPrimitive(date.getTime());
-		}
 	}
 
 }
