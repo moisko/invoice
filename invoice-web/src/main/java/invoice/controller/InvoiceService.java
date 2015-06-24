@@ -1,6 +1,6 @@
 package invoice.controller;
 
-import invoice.db.InvoiceDAO;
+import invoice.dao.InvoiceDAO;
 import invoice.model.Invoice;
 
 import javax.persistence.EntityManagerFactory;

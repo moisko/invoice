@@ -1,7 +1,7 @@
 package invocie.db;
 
 import static org.junit.Assert.assertNotNull;
-import invoice.db.InvoiceDAO;
+import invoice.dao.InvoiceDAO;
 import invoice.gson.DatetimeDeserializer;
 import invoice.gson.DatetimeSerializer;
 import invoice.model.Invoice;

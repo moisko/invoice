@@ -1,4 +1,4 @@
-package invoice.db;
+package invoice.dao;
 
 import invoice.model.Invoice;
 
