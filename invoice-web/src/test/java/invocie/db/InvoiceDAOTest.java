@@ -32,6 +32,7 @@ public class InvoiceDAOTest {
 	public ExpectedException exception = ExpectedException.none();
 
 	private static final String PERSISTENCE_UNIT_NAME = "InvoiceTest";
+	private static final String TEST_RESOURCES_DIR = "src/test/resources/";
 
 	private static EntityManagerFactory emf;
 	private static InvoiceDAO invoiceDAO;
@@ -44,8 +45,8 @@ public class InvoiceDAOTest {
 
 	@Test
 	public void testCRUDOperations() throws Exception {
-		invoiceDAO
-				.persistInvoice(fromJsonFile("src/test/resources/invoice.json"));
+		invoiceDAO.persistInvoice(fromJsonFile(TEST_RESOURCES_DIR
+				+ "invoice.json"));
 		Invoice invoice = invoiceDAO.getInvoice(1L);
 		assertNotNull(invoice);
 		invoiceDAO.deleteInvoice(1L);
@@ -66,7 +67,8 @@ public class InvoiceDAOTest {
 	@Test
 	public void testDeserializeInvoiceWithInvalidDate() throws Exception {
 		exception.expect(NumberFormatException.class);
-		fromJsonFile("src/test/resources/invoice_with_invalid_date_format.json");
+		fromJsonFile(TEST_RESOURCES_DIR
+				+ "invoice_with_invalid_date_format.json");
 	}
 
 	@AfterClass
