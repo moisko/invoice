@@ -24,7 +24,6 @@ public class Invoice implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
-	private InvoiceDetails details;
 	private String number;
 	private Date date;
 	private String recipient;
@@ -34,6 +33,7 @@ public class Invoice implements Serializable {
 	private String invoiceNumberId;
 	private String vat;
 	private String provider;
+	private InvoiceDetails details;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
