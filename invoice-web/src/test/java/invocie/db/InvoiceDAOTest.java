@@ -34,7 +34,6 @@ public class InvoiceDAOTest {
 	private static final String PERSISTENCE_UNIT_NAME = "InvoiceTest";
 
 	private static EntityManagerFactory emf;
-
 	private static InvoiceDAO invoiceDAO;
 
 	@BeforeClass
