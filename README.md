@@ -5,7 +5,7 @@ POST -> /invoice-web/invoice/create
 
 Example:
 
-http://www.boratino.com/invoice-web/invoice/create
+http://borisborisov.bg/invoice-web/invoice/create
 ```
 {
 	"number": "1234",
@@ -31,13 +31,13 @@ GET -> /invoice-web/invoice/get/{id}
 
 Example:
 
-http://www.boratino.com/invoice-web/invoice/get/1
+http://borisborisov.bg/invoice-web/invoice/get/1
 
 PUT -> /invoice-web/invoice/update/{id}
 
 Example:
 
-http://www.boratino.com/invoice-web/invoice/update/
+http://borisborisov.bg/invoice-web/invoice/update/
 
 **NOT SUPPORTED!**
 
@@ -45,4 +45,4 @@ DELETE -> /invoice-web/invoice/delete/{id}
 
 Example:
 
-http://www.boratino.com/invoice-web/invoice/delete/1
+http://borisborisov.bg/invoice-web/invoice/delete/1
